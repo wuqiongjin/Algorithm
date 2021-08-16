@@ -9,8 +9,8 @@ public:
             return;
         }
 
-        //横向遍历
-        for(int i = startIndex; i <= n; ++i)
+        //横向遍历              //n - (k - path.size()) + 1 表示最大的起始位置下标。
+        for(int i = startIndex; i <= n - (k - path.size()) + 1; ++i)    //剪枝操作
         {
             path.push_back(i);          //将i放入path结果中
             backtracking(n, k, i + 1);  //递归。[这题是要求组合，因此集合中的元素不能重复使用，下一次就要传 i + 1]
