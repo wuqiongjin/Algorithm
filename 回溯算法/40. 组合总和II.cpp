@@ -49,3 +49,49 @@ public:
     vector<int> path;
     vector<vector<int>> ans;
 };
+
+
+class Solution {
+public:
+    //去重去的是 同一层的重, 纵向递归不需要进行去重操作, 纵向可以使用相同的字符, 而横向需要进行额外判断
+    //[1, 1, 2]
+    //[1, 2] [1, 2] 这种就需要去重了
+    int Sum(){
+        int ret = 0;
+        for(int e : path)
+            ret += e;
+        return ret;
+    }
+
+    void backtracking(int startIndex, vector<int>& candidates, int target, deque<bool>& used){
+        if(Sum() >= target){
+            if(Sum() == target)
+                res.push_back(path);
+            return;
+        }
+        
+        for(int i = startIndex; i < candidates.size(); ++i)
+        {
+            if(i > 0 && candidates[i] == candidates[i - 1] && used[i - 1] == false){
+                continue;
+            }
+            path.push_back(candidates[i]);
+            used[i] = true;
+            backtracking(i + 1, candidates, target, used);
+            path.pop_back();
+            used[i] = false;
+        }
+    }
+
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        deque<bool> used(candidates.size(), false); //尽量不要使用vector<bool>
+        sort(candidates.begin(), candidates.end()); //先排序, 然后才能进行去重判断
+        path.clear();
+        res.clear();
+        backtracking(0, candidates, target, used);
+        return res;
+    }
+
+    vector<int> path;
+    vector<vector<int>> res;
+};
