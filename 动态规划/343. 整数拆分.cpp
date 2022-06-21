@@ -15,3 +15,26 @@ public:
         return dp[n];
     }
 };
+
+
+//N-2
+class Solution {
+public:
+    int integerBreak(int n) {
+        //dp[j]: 拆分数字j, 可以得到的最大成乘积化为dp[j]
+        //dp[j]可以由2种情况拆分: 1.直接拆分为2个数字的积 2.拆分为一个数字和另一个dp(子问题)
+        //dp[j] = max(i * (j - i), i * dp[j - i]);
+        vector<int> dp(n + 1);
+        dp[0] = 0;
+        dp[1] = 1;
+
+        for(int j = 2; j <= n; ++j)
+        {
+            for(int i = 1; i < j; ++i)
+            {
+                dp[j] = max({dp[j], i * (j - i), i * dp[j - i]});
+            }
+        }
+        return dp[n];
+    }
+};
