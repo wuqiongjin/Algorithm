@@ -20,3 +20,26 @@ public:
         return dp[n];
     }
 };
+
+
+//N-2
+class Solution {
+public:
+    int numTrees(int n) {
+        vector<int> dp(n + 1, 0);//1到i节点组成的二叉搜索树的个数为dp[i]
+        dp[0] = 1;
+        
+        for(int i = 0; i <= n; ++i)
+        {
+            for(int j = 1; j <= i; ++j)
+            {
+                //j从1开始遍历, 遍历到i; 将每个以 j 为头结点的BST的个数都累加起来
+                //以 j 为头结点组成BST的个数为 dp[j - 1] * dp[i - j]
+                //即, 左子树有dp[j-1]种组合方式 * 右子树有dp[i-j]种组合方式, 它们相乘即是j为头结点的个数
+                dp[i] += dp[j - 1] * dp[i - j];
+            }
+        }
+
+        return dp[n];
+    }
+};
