@@ -34,3 +34,45 @@ public:
         return dp[m][n];
     }
 };
+
+
+//N-2
+class Solution {
+public:
+    //正常的背包问题dp是一种容量, 因此可以使用二维dp
+    //这道题有和正常的dp的区别只在于容量是2种而不是1种, 因此应该使用三维dp
+    //dp[i][j][k]: 从[0, i]选取字符串, 放入容量为j的字符0的背包和容量为k的字符1的背包的最长子集为dp[i][j][k] (使用j个0和k个1 能够得到的最大子集长度为dp[i][j][k])
+    //我们可以使用滚动数组, 这样可以使其降低一个维度(不过要注意遍历顺序!!!)
+    int findMaxForm(vector<string>& strs, int m, int n) {
+        vector<int> zeroNum, oneNum;
+        for(auto& s : strs){
+            int cnt0 = 0, cnt1 = 0;
+            for(auto& ch : s){
+                if(ch == '0'){
+                    ++cnt0;
+                }
+                else{
+                    ++cnt1;
+                }
+            }
+            zeroNum.emplace_back(cnt0);
+            oneNum.emplace_back(cnt1);
+        }
+        
+        //dp[i][j]: 最多放入i个0和j个1的背包的最大子集长度为dp[i][j]
+        vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
+        
+        for(int index = 0; index < strs.size(); ++index)
+        {
+            for(int i = m; i >= zeroNum[index]; --i)
+            {
+                for(int j = n; j >= oneNum[index]; --j)
+                {
+                    dp[i][j] = max(dp[i][j], dp[i - zeroNum[index]][j - oneNum[index]] + 1);
+                }
+            }
+        }
+
+        return dp[m][n];
+    }
+};
