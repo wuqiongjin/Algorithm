@@ -78,3 +78,51 @@ public:
         return ans;
     }
 };
+
+
+
+//N-2
+class Solution {
+public:
+    int countSubstrings(string s) {
+        //1. 确定dp数组
+        //bool dp[i][j]: 区间[i, j]的子串是否为回文串 (我们通过res保存答案, dp数组判断是否是回文串)
+        //2. 确定状态转移方程
+        //当s[i] != s[j]:
+        //dp[i][j] = false;
+        //当s[i] == s[j]:
+        //如果 i == j, 即[i,j]区间表示1个字符, 那么它一定是回文串, dp[i][j] = true      # a
+        //如果 j - i == 1, 即[i, j]区间表示2个字符, 再加上这2个字符相等, 那么它也一定是回文串   # aa
+        //如果 j - i == 2, 即[i, j]区间表示3个字符, 再加上这2个字符相等, 那么它也一定是回文串   # aba
+        //如果 j - i > 2, 如( abda ), 此时i和j指向了字符a, 我们如果要判断这个子串是否是回文串的话, 还需要
+        //判断 s[i + 1] 与 s[j - 1], 即 dp[i][j] = dp[i + 1][j - 1];
+        //3. dp数组初始化 false
+        //4. 确定遍历顺序
+        //由于状态转移方程中涉及了 dp[i + 1][j - 1], 
+        //因此, 为了确保能得到第 i 行, 我们需要先获取到 i + 1 行, 即, 从下到上遍历
+        //因此, 为了确保能得到第 j 列, 我们需要先获取第 j - 1 列, 即 , 从左向右遍历
+
+        vector<vector<bool>> dp(s.size(), vector<bool>(s.size(), false));
+        int res = 0;    //用变量res统计回文串数量
+        for(int i = s.size() - 1; i >= 0; --i)
+        {
+            for(int j = i; j < s.size(); ++j)
+            {
+                if(s[i] != s[j]){
+                    dp[i][j] = false;
+                }
+                else{
+                    if(j - i <= 2){	//实际上这里判断是 <= 1 还是 <= 2都可以
+                        dp[i][j] = true;
+                        ++res;
+                    }
+                    else{
+                        dp[i][j] = dp[i + 1][j - 1];
+                        if(dp[i][j] == true)    ++res;
+                    }
+                }
+            }
+        }
+        return res;
+    }
+};

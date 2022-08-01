@@ -31,3 +31,33 @@ public:
         return dp[0][s.size() - 1];
     }
 };
+
+
+//N-2
+class Solution {
+public:
+    int longestPalindromeSubseq(string s) {
+        //dp[i][j]: 字符串s在区间[i, j]内的最长回文子序列的长度为dp[i][j]
+        vector<vector<int>> dp(s.size(), vector<int>(s.size(), 0));
+        //当s[i] == s[j]
+        //dp[i][j] += dp[i + 1][j - 1]
+        //当s[i] != s[j]
+        //dp[i][j] = max(dp[i + 1][j], dp[i][j - 1]);
+        for(int i = 0; i < s.size(); ++i)   dp[i][i] = 1;   // i == j时, 一定是回文串, 这里初始化为1
+
+        for(int i = s.size() - 1; i >= 0; --i)
+        {
+			// j 从 i + 1 开始, 直接排除相等位置的情况 (初始化的时候就已经完成了相同字符的处理)
+            for(int j = i + 1; j < s.size(); ++j)   //这里我们直接排除了 i 和 j 在同一位置的情况了 (不然下面还需要额外的if判断)
+            {
+                if(s[i] != s[j]){
+                    dp[i][j] = max(dp[i + 1][j], dp[i][j - 1]);
+                }
+                else{
+                    dp[i][j] = dp[i + 1][j - 1] + 2;
+                }
+            }
+        }
+        return dp[0][s.size() - 1];
+    }
+};
