@@ -1,6 +1,10 @@
 class Solution {
 public:
     //动态规划
+    //dp[i]:
+    //dp[i] <---  dp[i-1] + nums[i]
+    //      <---  nums[i]
+    //dp[i] = max(nums[i], dp[i-1] + nums[i]);
     int maxSubArray(vector<int>& nums) 
     {
         if(nums.size() == 0)    return nums[0];
